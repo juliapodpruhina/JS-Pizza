@@ -13,3 +13,15 @@ $(function(){
 
 
 });
+
+function removeFromCart(cart_item) {
+    var temp = [];
+    var indexOfItem = Cart.indexOf(cart_item);
+    for (var i=0; i<Cart.length; i++){
+        if(i != indexOfItem){
+            temp[i] = Cart[i];
+        }
+    }
+    Cart = temp;
+    updateCart();
+}

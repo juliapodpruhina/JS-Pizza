@@ -8,6 +8,15 @@ var Pizza_List = require('../Pizza_List');
 //HTML едемент куди будуть додаватися піци
 var $pizza_list = $("#pizza_list");
 
+var filterTitles = {
+    meat:"М'ясні піцци",
+    pineapple:"Піци з ананнасами",
+    mushroom:"Піци з грибами",
+    ocean:"Піци з морепродуктами",
+    additional:"Вегетаріанські піци",
+    nofilter:"Усі піцци"
+}
+
 function showPizzaList(list) {
     //Очищаємо старі піци в кошику
     $pizza_list.html("");
@@ -19,10 +28,10 @@ function showPizzaList(list) {
         var $node = $(html_code);
 
         $node.find(".buy-big").click(function(){
-            PizzaCart.addToCart(pizza, PizzaCart.PizzaSize.Big);
+            PizzaCart.addToCart(pizza, PizzaCart.PizzaSize.Big, pizza.big_size.price);
         });
         $node.find(".buy-small").click(function(){
-            PizzaCart.addToCart(pizza, PizzaCart.PizzaSize.Small);
+            PizzaCart.addToCart(pizza, PizzaCart.PizzaSize.Small, pizza.small_size.price);
         });
 
         $pizza_list.append($node);
@@ -31,23 +40,40 @@ function showPizzaList(list) {
     list.forEach(showOnePizza);
 }
 
-function filterPizza(filter) {
-    //Масив куди потраплять піци які треба показати
-    var pizza_shown = [];
 
-    Pizza_List.forEach(function(pizza){
-        //Якщо піка відповідає фільтру
-        //pizza_shown.push(pizza);
+    function filterPizza() {
+        $(".pizza-filter").click(function(){
+        var pizza_shown = [];
+        var temp=$(this).attr("id");
+        if(temp == "nofilter"){
+             showPizzaList(Pizza_List);
+        } else{
+        Pizza_List.forEach(function(pizza){
+            if(pizza.content[temp]){
+                if(temp == "additional"){
+                    if(!pizza.content["ocean"] && !pizza.content["meat"]){
+                        pizza_shown.push(pizza);
+                    }
+                } else pizza_shown.push(pizza);
+                }
+    
+        });
+        }
+            showPizzaList(pizza_shown);
+            $(".pizza-type-count").html(pizza_shown.length);
+            redesign(temp);
+        });
+}
 
-        //TODO: зробити фільтри
-    });
-
-    //Показати відфільтровані піци
-    showPizzaList(pizza_shown);
+function redesign(filter){
+    $(".pizza-type-title").html(filterTitles[filter]);
+    $("#"+filter).attr("class", "active");
+    $(".pizza-filter").removeClass("active");
 }
 
 function initialiseMenu() {
     //Показуємо усі піци
+    filterPizza();
     showPizzaList(Pizza_List)
 }
 
