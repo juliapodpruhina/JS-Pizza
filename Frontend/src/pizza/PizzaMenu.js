@@ -47,6 +47,7 @@ function showPizzaList(list) {
         var temp=$(this).attr("id");
         if(temp == "nofilter"){
              showPizzaList(Pizza_List);
+            $(".pizza-type-count").html(Pizza_List.length);
         } else{
         Pizza_List.forEach(function(pizza){
             if(pizza.content[temp]){
@@ -58,17 +59,17 @@ function showPizzaList(list) {
                 }
     
         });
-        }
             showPizzaList(pizza_shown);
             $(".pizza-type-count").html(pizza_shown.length);
+        }
             redesign(temp);
         });
 }
 
 function redesign(filter){
     $(".pizza-type-title").html(filterTitles[filter]);
-    $("#"+filter).attr("class", "active");
-    $(".pizza-filter").removeClass("active");
+    $(".pizza-filter").attr("class", "pizza-filter");
+    $("#"+filter).attr("class", "active pizza-filter");
 }
 
 function initialiseMenu() {
