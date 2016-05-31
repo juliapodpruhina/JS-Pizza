@@ -241,7 +241,7 @@ var PizzaSize = {
 };
 
 //Змінна в якій зберігаються перелік піц в кошику
-var Cart = [];
+var Cart;
 
 //HTML едемент куди будуть додаватися піци
 var $cart = $("#cart");
@@ -289,7 +289,9 @@ function initialiseCart() {
     //Фукнція віпрацьвуватиме при завантаженні сторінки
     //Тут можна наприклад, зчитати вміст корзини який збережено в Local Storage то показати його
     //TODO: ...
-    Cart = Storage.get("cart");
+    if(Storage.get("cart")){
+        Cart = Storage.get("cart");
+    } else Cart = [];
     var count=0;
     Cart.forEach(function(e){
         sumPrice+=parseInt(e.price*e.quantity);
